@@ -1,0 +1,27 @@
+---
+title: "AssignmentSUB2026"
+Name: "Esther Zam Hau Cing"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE,
+  message = FALSE)
+library(tidyverse)
+library(ggplot2)
+```
+# Load Data
+```{r}
+#Load files
+customers<-read.csv("customers.csv")
+geolocation<-read.csv("geolocation.csv")
+order_items<-read.csv("order_items.csv")
+orders<-read.csv("orders.csv")
+payments<-read.csv("payments.csv")
+products<-read.csv("products.csv")
+sellers<-read.csv("sellers.csv")
+
+```
+
+
+
