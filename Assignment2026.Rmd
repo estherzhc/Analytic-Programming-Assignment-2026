@@ -23,5 +23,43 @@ sellers<-read.csv("sellers.csv")
 
 ```
 
+## Rationale
+A histogram was used because price is numerical variable and it helps show the distribution of item prices. The mean and median were calculated using the mean() and median() base r code functions to find the average and median item price. 
+A left join was used to combine the order_items and products data using product_id, which is a foreign key in order_items. This allowed product weight data to be added to the order item data and viewed them together in one table.
+A scatter plot was utilized because both product weight and freight value are numerical variables.It shows whether there is a relationship between product weight and shipping cost.
+
+## Code
+```{r}
+#Create a histogram to visualise the distribution of item prices
+
+p1<-ggplot(data=order_items) + 
+  geom_histogram(mapping=aes(x=price), fill="steelblue", colour="black", bins=10) + 
+  labs(title="Distribution of Item Prices", x="Price", y="Frequency")
+print(p1)
+
+#Calculate mean item price
+mean_price<-mean(order_items$price)
+print(mean_price)
+
+#Calculate median item price
+median_price<-median(order_items$price)
+print(median_price)
+
+#Join order_items and products using product_id
+order_product_data<-order_items%>%
+  left_join(products, by="product_id")
+
+#Create a scatter plot of freight value against product weight
+ggplot(data=order_product_data) + 
+  geom_point(mapping=aes(x=product_weight_g, y=freight_value), colour="steelblue", size=0.5) + 
+  labs(x="Product Weight(G)", y="Freight Value", title="Freight Value and Product Weight")
+
+
+```
+
+## Findings
+The mean item price was 120.6537 while the median item price was 74.99. The mean price is higher than the median price.This shows that there are some expensive products that increase the average price. 
+The histogram also shows that most products have lower prices while only a small number of products have very high prices.
+We can see that heavier products generally have higher freight values from the scatter plot. When the product weight increases, the shipping cost also tends to be higher. However, there are also some products with similar heavy weights around 30,000 g but they have different shipping charges.Similarly, some products weigh lighter but the freight values are slightly higher. Therefore, weight is not the only factor that can affect shipping costs. This suggests that other factors may also affect freight values such as the seller location, delivery distance, or product dimensions.
 
 
