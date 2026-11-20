@@ -23,6 +23,7 @@ sellers<-read.csv("sellers.csv")
 
 ```
 
+# Task 1 Product Prices and Shipping Costs
 ## Rationale
 A histogram was used because price is numerical variable and it helps show the distribution of item prices. The mean and median were calculated using the mean() and median() base r code functions to find the average and median item price. 
 A left join was used to combine the order_items and products data using product_id, which is a foreign key in order_items. This allowed product weight data to be added to the order item data and viewed them together in one table.
@@ -50,9 +51,10 @@ order_product_data<-order_items%>%
   left_join(products, by="product_id")
 
 #Create a scatter plot of freight value against product weight
-ggplot(data=order_product_data) + 
+p2<-ggplot(data=order_product_data) + 
   geom_point(mapping=aes(x=product_weight_g, y=freight_value), colour="steelblue", size=0.5) + 
   labs(x="Product Weight(G)", y="Freight Value", title="Freight Value and Product Weight")
+print(p2)
 
 
 ```
@@ -62,4 +64,62 @@ The mean item price was 120.6537 while the median item price was 74.99. The mean
 The histogram also shows that most products have lower prices while only a small number of products have very high prices.
 We can see that heavier products generally have higher freight values from the scatter plot. When the product weight increases, the shipping cost also tends to be higher. However, there are also some products with similar heavy weights around 30,000 g but they have different shipping charges.Similarly, some products weigh lighter but the freight values are slightly higher. Therefore, weight is not the only factor that can affect shipping costs. This suggests that other factors may also affect freight values such as the seller location, delivery distance, or product dimensions.
 
+# Task 2 Orders That Were Not Delivered
+## Rationale
+The data was group by order status first to count the number of orders in each order status, such as delivered, shipped. The percentage of all orders was also calculated to make it easier to compare the different order statuses.
+A bar chart was used for a visualisation because order status is a categorical variable. Therefore, it helps to compare the percentage of orders in each status clearly and simply. 
+A left join was applied to combine the orders and customers data to view the data of these tables together through customer_id. So, customer state information and order status can be viewed and anlysed together easily. 
+The data was grouped by customer state to calculate the percentage of orders that were not delivered in each state. To view this visually, the bar chart was used as it compares the not delivered percentage betweem different states.
 
+## Code 
+```{r}
+#Count the number of orders in each order status
+order_status_summary<-orders%>%
+  group_by(order_status)%>%
+  summarise(order_count=n()) %>%
+  mutate(percentage_of_all_orders=order_count/sum(order_count)*100)
+
+print(order_status_summary)
+
+#Create a bar chart of this order_status
+p3<-ggplot(data=order_status_summary)+
+    geom_col(mapping=aes(x=order_status, y=percentage_of_all_orders), fill="steelblue") +
+  labs(x="Order Status", y="Percentage of Orders (%)", title="Percentage of Orders by Status")
+
+print(p3)
+
+#Calculate percentage of orders that are not delivered
+not_delivered_percentage<- order_status_summary%>%
+  filter(order_status!="delivered")%>%
+  summarise(not_delivered_percentage=sum(percentage_of_all_orders))
+  
+print(not_delivered_percentage)
+
+#Join orders.csv and customers.csv using customer_id
+order_and_customers<- orders%>%
+  left_join(customers, by="customer_id")
+
+
+#Calculate percentage of orders that are not delivered in each customer state
+state_delivery_summary<- order_and_customers%>%
+  group_by(customer_state)%>%
+  summarise(
+    total_orders=n(),
+    not_delivered_orders= sum(order_status!="delivered"),
+    not_delivered_pct= (not_delivered_orders/total_orders)*100
+  )
+print(state_delivery_summary)
+
+#Create a bar chart of not delivered orders percentage by customer state
+p4<-ggplot(data=state_delivery_summary) +
+  geom_col(mapping=aes(x=customer_state, y=not_delivered_pct), fill="steelblue")+
+  labs(x="Customer State", y="Not Delivered Percentage (%)", title="Percentage of Orders Not Delivered by State")
+print(p4)
+```
+
+## Findings
+There were a total of 99,441 orders and 96,478 orders were delivered. Therefore, the percentage of delivered orders was 97.02% among all orders. The other 2,963 orders were not delivered, which was approximately 2.98% of all orders. The bar chart clearly shows that delivered orders had a much higher percentage compared to other order statuses.
+Among the non-delivered statuses, shipped had the highest percentage at 1.11%, followed by canceled at 0.63% and unavailable at 0.61%. The other order statuses had very small percentages. This shows that most orders were successfully delivered and only a small number of orders were not delivered. 
+
+The percentage of orders not delivered was different across customer states. RR had the highest percentage at approximately 10.87%. However, RR only had 46 orders in total, so the small number of orders increased the effect of each non-delivered orders on its percentage. SE and CE also had higher percentages at around 4.29% and 4.27%, while AC had the lowest percentage about 1.23%.
+SP had the highest number of orders and also the highest number of non-delivered orders. There were 41,746 orders from SP and 1,245 of them were not delivered. However, its not delivered percentage was only around 2.98% because SP had a much larger number of total orders. Therefore, both the percentage and total number of orders should be considered when comparing the states.
