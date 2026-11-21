@@ -66,10 +66,10 @@ We can see that heavier products generally have higher freight values from the s
 
 # Task 2 Orders That Were Not Delivered
 ## Rationale
-The data was group by order status first to count the number of orders in each order status, such as delivered, shipped. The percentage of all orders was also calculated to make it easier to compare the different order statuses.
+The data was grouped by order status first to count the number of orders in each order status, such as delivered, shipped. The percentage of all orders was also calculated to make it easier to compare the different order statuses.
 A bar chart was used for a visualisation because order status is a categorical variable. Therefore, it helps to compare the percentage of orders in each status clearly and simply. 
-A left join was applied to combine the orders and customers data to view the data of these tables together through customer_id. So, customer state information and order status can be viewed and anlysed together easily. 
-The data was grouped by customer state to calculate the percentage of orders that were not delivered in each state. To view this visually, the bar chart was used as it compares the not delivered percentage betweem different states.
+A left join was applied to combine the orders and customers data to view the data of these tables together through customer_id. So, customer state information and order status can be viewed and analysed together easily. 
+The data was grouped by customer state to calculate the percentage of orders that were not delivered in each state. To view this visually, the bar chart was used as it compares the not delivered percentage between different states.
 
 ## Code 
 ```{r}
@@ -123,3 +123,48 @@ Among the non-delivered statuses, shipped had the highest percentage at 1.11%, f
 
 The percentage of orders not delivered was different across customer states. RR had the highest percentage at approximately 10.87%. However, RR only had 46 orders in total, so the small number of orders increased the effect of each non-delivered orders on its percentage. SE and CE also had higher percentages at around 4.29% and 4.27%, while AC had the lowest percentage about 1.23%.
 SP had the highest number of orders and also the highest number of non-delivered orders. There were 41,746 orders from SP and 1,245 of them were not delivered. However, its not delivered percentage was only around 2.98% because SP had a much larger number of total orders. Therefore, both the percentage and total number of orders should be considered when comparing the states.
+
+# Task 3 Payment Methods 
+## Rationale
+The data was grouped by payment type to count the number of payments for each payment method. The percentage of total payments was also calculated to make it easier to compare the usage frequency between different payment types.
+A bar chart was used to view the data visually because payment type is a categorical variable and percentage of payment usage is a numerical variable. Therefore, it is useful for comparing the percentage of payments across different payment types clearly.
+A boxplot was used for this one since payment type is a categorical variable, while payment value is a numerical variable. The boxplot helps compare the distribution of payment values between different payment types and identify which payment types are generally used for larger or smaller payment amounts.
+
+## Code 
+```{r}
+#Calculate the number and percentage of payments for each payment type
+
+payment_usage_frequency<- payments%>%
+  group_by(payment_type)%>%
+  summarise(total_payment_number=n())%>%
+  mutate(payment_usage_percentage=
+           (total_payment_number/sum(total_payment_number)*100))
+
+print(payment_usage_frequency)
+
+#Produce a bar chart to visualize payment usage frequency
+
+p5<-ggplot(data=payment_usage_frequency) +
+  geom_col(mapping= aes(x=payment_type, y=payment_usage_percentage), fill="steelblue") +
+  labs(x="Payment Type", y="Percentage of Payment Usage (%)", title="Payment Type Usage Frequency")
+
+print(p5)
+#Compare payment values across different payment types using a boxplot
+
+p6<-ggplot(data=payments)+
+  geom_boxplot(mapping=aes(x=payment_type, y=payment_value), fill="steelblue") +
+  coord_cartesian(ylim=c(0,1000)) +
+  labs(x="Payment Type", y="Payment Value", title="Payment Value Distribution by Payment Type")
+
+print(p6)
+
+
+```
+
+## Findings
+Credit card was the most commonly used payment type with 76,795 payments, which was 73.92% of all payments. Boleto was the second most used payment with 19,784 payments or 19.04%. Voucher and debit card were used less frequently with 5.56% and 1.47% of payments respectively. The not defined payment type was rarely used with only 3 payments.
+The bar chart shows that credit card was the most commonlly used payment method with 73.92% among all payments. This means that most customers preferred to use credit card when making purchases.
+
+The boxplot shows that credit card payments were generally used for larger payment amounts compared to the other payment types. Boleto and debit card payments also had relatively high payment values. Voucher payments were generally used for smaller amounts because most voucher payments were lower than the previously mentioned three payment methods. The not defined payment type had only 3 records with payment values of 0, so it does not provide enough information to make a comparison with other payment types.
+There are also several outliers in the boxplot, especially for credit card and boleto payments. This means that some customers made very large transactions with these payment types.
+  
