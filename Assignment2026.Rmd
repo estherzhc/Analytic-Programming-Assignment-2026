@@ -1,7 +1,9 @@
 ---
 title: "AssignmentSUB2026"
-Name: "Esther Zam Hau Cing"
-output: html_document
+Name: Esther Zam Hau Cing
+output:
+  word_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -62,7 +64,7 @@ print(p2)
 ## Findings
 The mean item price was 120.6537 while the median item price was 74.99. The mean price is higher than the median price.This shows that there are some expensive products that increase the average price. 
 The histogram also shows that most products have lower prices while only a small number of products have very high prices.
-We can see that heavier products generally have higher freight values from the scatter plot. When the product weight increases, the shipping cost also tends to be higher. However, there are also some products with similar heavy weights around 30,000 g but they have different shipping charges.Similarly, some products weigh lighter but the freight values are slightly higher. Therefore, weight is not the only factor that can affect shipping costs. This suggests that other factors may also affect freight values such as the seller location, delivery distance, or product dimensions.
+We can see that heavier products generally have higher freight values from the scatter plot. When the product weight increases, the shipping cost also tends to be higher. However, there are also some products with similar heavy weights around 30,000 g but they have different shipping charges. Similarly, some products weigh lighter but the freight values are slightly higher. Therefore, weight is not the only factor that can affect shipping costs. This suggests that other factors may also affect freight values such as the seller location, delivery distance, or product dimensions.
 
 # Task 2 Orders That Were Not Delivered
 ## Rationale
@@ -165,7 +167,7 @@ print(p6)
 Credit card was the most commonly used payment type with 76,795 payments and in percentage, 73.92% of all payments. Boleto was the second most used payment with 19,784 payments or 19.04%. Voucher and debit card were used less frequently with 5.56% and 1.47% of payments respectively. The not defined payment type was rarely used as there are only 3 payments.
 The bar chart shows that credit card was the most commonly used payment method with 73.92% among all payments. This means that most customers preferred to use credit card when making purchases.
 
-Based on the boxplot, it can been seen that credit card payments were generally used for larger payment amounts compared to the other payment types. Boleto and debit card payments also had relatively high payment values. Voucher payments were generally used for smaller amounts because most amounts of voucher payments were lower than the previously mentioned three payment methods. The not defined payment type had only 3 records with payment values of 0, so, it does not provide enough information to make a comparison with other payment types.
+Based on the boxplot, it can be seen that credit card payments were generally used for larger payment amounts compared to the other payment types. Boleto and debit card payments also had relatively high payment values. Voucher payments were generally used for smaller amounts because most amounts of voucher payments were lower than the previously mentioned three payment methods. The not defined payment type had only 3 records with payment values of 0, so, it does not provide enough information to make a comparison with other payment types.
 There are also several outliers in the boxplot, especially credit card and boleto payments. This means that some customers made very large transactions with these payment types.
 
 # Appendix
